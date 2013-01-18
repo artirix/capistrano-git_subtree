@@ -120,6 +120,11 @@ module Capistrano
             execute << "#{git} submodule #{verbose} update"
           end
 
+          if variable(:git_post_checkout)
+            # any commands to run in the exported copy before packaging
+            execute << "(#{(["cd #{destination}"] + variable(:git_post_checkout)).join(' && ')})"
+          end
+
           execute.join(" && ")
         end
         
